@@ -22,6 +22,8 @@ namespace TofuGirl
 
         [Header("Platform Configs")]
         [SerializeField] private float m_PlatformSpeed = 1000.0f;
+        [SerializeField] private float m_PlatformWidth = 400.0f;
+        [SerializeField] private float m_PlatformHeight = 200.0f;
 
         private bool m_SpawnRight = false;
         private List<PlatformController> m_PlatformControllers = new List<PlatformController>();
@@ -43,7 +45,7 @@ namespace TofuGirl
         /// </summary>
         public void SpawnPlatform()
         {
-            m_ParentTransform.transform.position += Vector3.down * 200.0f;
+            m_ParentTransform.transform.position += Vector3.down * m_PlatformHeight;
 
             m_SpawnRight = !m_SpawnRight;
             SpawnPlatform(m_SpawnRight);
@@ -77,12 +79,12 @@ namespace TofuGirl
 
             if (spawnRight)
             {
-                platformController.transform.position = new Vector3(Screen.width * 0.5f + platformController.PlatformBounds.extents.x, transform.position.y, 0.0f);
+                platformController.transform.position = new Vector3(Screen.width * 0.5f + (m_PlatformWidth * 0.5f), transform.position.y, 0.0f);
                 platformController.Initialize(m_PlatformSpeed, Vector3.left);
             }
             else
             {
-                platformController.transform.position = new Vector3(Screen.width * -0.5f - platformController.PlatformBounds.extents.x, transform.position.y, 0.0f);
+                platformController.transform.position = new Vector3(Screen.width * -0.5f - (m_PlatformWidth * 0.5f), transform.position.y, 0.0f);
                 platformController.Initialize(m_PlatformSpeed, Vector3.right);
             }
         }
