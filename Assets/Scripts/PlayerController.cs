@@ -12,10 +12,21 @@ namespace TofuGirl
     {
         [SerializeField] private float m_JumpForce = 50.0f;
         [SerializeField] private float m_GravityFactor = 0.5f;
+        [SerializeField] private ObjectCollision m_PlayerCollision = null;
 
         private bool m_IsGameOver = false;
         private bool m_IsGrounded = false;
         private Vector3 m_Velocity = Vector3.zero;
+
+        public void OnEnable()
+        {
+            m_PlayerCollision.OnCollisionEnter += OnPlayerCollisionEnter;
+        }
+
+        public void OnDisable()
+        {
+            m_PlayerCollision.OnCollisionEnter -= OnPlayerCollisionEnter;
+        }
 
         public void Start()
         {
@@ -31,6 +42,7 @@ namespace TofuGirl
                 if(Input.GetMouseButtonDown(1))
                 {
                     m_IsGameOver = false;
+                    m_PlayerCollision.ClearActiveColliders();
                     PlatformSpawner.Instance.ResetSpawner();
                 }
 
@@ -61,34 +73,29 @@ namespace TofuGirl
             transform.position += m_Velocity * Time.fixedDeltaTime;
         }
 
-        public void OnCollisionEnter2D(Collision2D collision)
+        /// <summary>
+        /// Used to detect collision detection.
+        /// </summary>
+        /// <param name="collisionInfo">Collision Info</param>
+        public void OnPlayerCollisionEnter(CollisionInfo collisionInfo)
         {
-            bool isPlatform = collision.collider.CompareTag("Platform");
-            bool isBasePlatform = collision.collider.CompareTag("BasePlatform");
+            m_IsGameOver = collisionInfo.otherNormal.x != 0.0f;
 
-            if(collision.contactCount >= 2 && (isBasePlatform || isPlatform))
+            if(collisionInfo.otherNormal.y > 0.0f)
             {
+                m_IsGrounded = true;
                 m_Velocity = Vector3.zero;
 
-                Vector3 contactNormal = collision.GetContact(1).normal;
-                bool didClear = contactNormal.y > 0.5f;
-                m_IsGameOver = contactNormal.x != 0.0f;
+                Vector3 position = transform.position;
+                position.y = collisionInfo.otherCollider.bounds.max.y;
 
-                if(didClear)
+                if(collisionInfo.otherCollider.CompareTag("Platform"))
                 {
-                    m_IsGrounded = true;
-                    Vector3 position = transform.position;
-                    position.y = collision.collider.bounds.max.y;
-
-                    if(isPlatform)
-                    {
-                        position.y = 0.0f;
-                        PlatformSpawner.Instance.SpawnPlatform();
-                    }
-
-                    transform.position = position;
+                    position.y = 0.0f;
+                    PlatformSpawner.Instance.SpawnPlatform();
                 }
 
+                transform.position = position;
             }
         }
     }

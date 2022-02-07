@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7483077471373259798}
   - component: {fileID: -1460109731096098209}
-  - component: {fileID: -4060030093786700443}
+  - component: {fileID: 7538625448250323691}
   - component: {fileID: 6994508462229010264}
   m_Layer: 0
   m_Name: Player
@@ -48,27 +48,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_JumpForce: 1500
   m_GravityFactor: 7
---- !u!50 &-4060030093786700443
-Rigidbody2D:
-  serializedVersion: 4
+  m_PlayerCollision: {fileID: 7538625448250323691}
+--- !u!114 &7538625448250323691
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 417380332731829866}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 1
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75bd85ad787a6154893f94a59c0f1d3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Collider2D: {fileID: 6994508462229010264}
 --- !u!61 &6994508462229010264
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -10,34 +10,25 @@ namespace TofuGirl
     /// </summary>
     public class PlatformController : MonoBehaviour
     {
-        [SerializeField] private BoxCollider2D m_Collider2D = null;
+        [SerializeField] private ObjectCollision m_ObjectCollision = null;
 
-        public Bounds PlatformBounds => m_Collider2D.bounds;
+        public Bounds PlatformBounds => m_ObjectCollision.Collider2D.bounds;
 
         private Vector3 m_Velocity = Vector3.zero;
+
+        public void OnEnable()
+        {
+            m_ObjectCollision.OnCollisionEnter += OnPlatformCollisionEnter;
+        }
+
+        public void OnDisable()
+        {
+            m_ObjectCollision.OnCollisionEnter -= OnPlatformCollisionEnter;
+        }
 
         public void Update()
         {
             transform.position += m_Velocity * Time.deltaTime;
-        }
-
-        public void OnCollisionEnter2D(Collision2D collision)
-        {
-            bool isPlayer = collision.collider.CompareTag("Player");
-
-            if (collision.contactCount >= 2 && isPlayer)
-            {
-                m_Velocity = Vector3.zero;
-
-                // Enable this if you want to retry again after the platform hits.
-                //Vector3 contactNormal = collision.GetContact(0).normal;
-                //bool isGameOver = contactNormal.x != 0.0f;
-
-                //if (isGameOver)
-                //{
-                //    PlatformSpawner.Instance.ResetSpawner();
-                //}
-            }
         }
 
         /// <summary>
@@ -48,6 +39,19 @@ namespace TofuGirl
         public void Initialize(float moveSpeed, Vector3 moveDirection)
         {
             m_Velocity = moveDirection * moveSpeed;
+            m_ObjectCollision.ClearActiveColliders();
+        }
+
+        /// <summary>
+        /// Used to detect collision detection.
+        /// </summary>
+        /// <param name="collisionInfo"></param>
+        private void OnPlatformCollisionEnter(CollisionInfo collisionInfo)
+        {
+            if(collisionInfo.otherCollider.CompareTag("Player"))
+            {
+                m_Velocity = Vector3.zero;
+            }
         }
     }
 }

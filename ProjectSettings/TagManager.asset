@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Platform
   - BasePlatform
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -13,7 +13,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Platform
   - 
   - 
   - 
